@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IBM Interview Prep – Complete Guide</title>
+  <meta name="description" content="Comprehensive IBM interview preparation: roadmap, online assessment, technical interview, coding challenges with test cases, and mock tests." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== SIDEBAR NAV ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="ibm-logo">IBM</div>
+    <span>Interview Prep</span>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#roadmap"    class="nav-link active" data-section="roadmap">🗺️ Roadmap</a>
+    <a href="#oa"         class="nav-link" data-section="oa">📝 Online Assessment</a>
+    <a href="#technical"  class="nav-link" data-section="technical">💡 Technical Interview</a>
+    <a href="#coding"     class="nav-link" data-section="coding">💻 Coding Assessment</a>
+    <a href="#mock"       class="nav-link" data-section="mock">🎯 Mock Test</a>
+    <a href="#solutions"  class="nav-link" data-section="solutions">✅ Solutions</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="progress-label">Overall Progress</div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="overallProgress"></div></div>
+    <div class="progress-text" id="progressText">0%</div>
+  </div>
+</aside>
+
+<!-- ===== HAMBURGER ===== -->
+<button class="hamburger" id="hamburger" aria-label="Toggle menu">☰</button>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-badge">🚀 2025 Edition</div>
+    <h1>IBM Interview <span class="gradient-text">Preparation</span></h1>
+    <p>Complete roadmap, OA practice, technical Q&A, coding challenges with test cases & timed mock tests — all in one place.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">150+</span><span class="stat-label">Questions</span></div>
+      <div class="stat"><span class="stat-num">6</span><span class="stat-label">Sections</span></div>
+      <div class="stat"><span class="stat-num">30+</span><span class="stat-label">Coding Problems</span></div>
+      <div class="stat"><span class="stat-num">5</span><span class="stat-label">Mock Tests</span></div>
+    </div>
+  </section>
+
+  <!-- ===== ROADMAP ===== -->
+  <section id="roadmap" class="section">
+    <div class="section-header">
+      <h2>🗺️ IBM Interview Roadmap</h2>
+      <p>Follow this structured path to crack IBM interviews</p>
+    </div>
+    <div class="roadmap-timeline" id="roadmapTimeline"></div>
+  </section>
+
+  <!-- ===== ONLINE ASSESSMENT ===== -->
+  <section id="oa" class="section">
+    <div class="section-header">
+      <h2>📝 Online Assessment (OA)</h2>
+      <p>IBM OA consists of Aptitude, Logical Reasoning, and English sections</p>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="aptitude">Aptitude</button>
+      <button class="tab-btn" data-tab="logical">Logical Reasoning</button>
+      <button class="tab-btn" data-tab="english">English</button>
+    </div>
+    <div class="tab-content" id="oaContent"></div>
+  </section>
+
+  <!-- ===== TECHNICAL INTERVIEW ===== -->
+  <section id="technical" class="section">
+    <div class="section-header">
+      <h2>💡 Technical Interview Q&A</h2>
+      <p>Most frequently asked IBM technical interview questions</p>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="ds">Data Structures</button>
+      <button class="tab-btn" data-tab="algo">Algorithms</button>
+      <button class="tab-btn" data-tab="os">OS &amp; Networks</button>
+      <button class="tab-btn" data-tab="dbms">DBMS &amp; SQL</button>
+      <button class="tab-btn" data-tab="oops">OOP &amp; Java</button>
+    </div>
+    <div class="tab-content" id="techContent"></div>
+  </section>
+
+  <!-- ===== CODING ASSESSMENT ===== -->
+  <section id="coding" class="section">
+    <div class="section-header">
+      <h2>💻 Coding Assessment</h2>
+      <p>IBM coding problems with full solutions and test cases</p>
+    </div>
+    <div class="difficulty-filter">
+      <button class="filter-btn active" data-diff="all">All</button>
+      <button class="filter-btn" data-diff="easy">Easy</button>
+      <button class="filter-btn" data-diff="medium">Medium</button>
+      <button class="filter-btn" data-diff="hard">Hard</button>
+    </div>
+    <div class="coding-grid" id="codingGrid"></div>
+  </section>
+
+  <!-- ===== MOCK TEST ===== -->
+  <section id="mock" class="section">
+    <div class="section-header">
+      <h2>🎯 Mock Tests</h2>
+      <p>Timed mock tests simulating real IBM assessment experience</p>
+    </div>
+    <div id="mockTestHub"></div>
+  </section>
+
+  <!-- ===== SOLUTIONS ===== -->
+  <section id="solutions" class="section">
+    <div class="section-header">
+      <h2>✅ Solutions &amp; Explanations</h2>
+      <p>Detailed solutions with time &amp; space complexity analysis</p>
+    </div>
+    <div id="solutionsContent"></div>
+  </section>
+
+</main>
+
+<!-- ===== CODING MODAL ===== -->
+<div class="modal-overlay" id="codingModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ===== MOCK TEST MODAL ===== -->
+<div class="modal-overlay" id="mockModal">
+  <div class="modal modal-wide">
+    <button class="modal-close" id="mockModalClose">✕</button>
+    <div id="mockModalContent"></div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
