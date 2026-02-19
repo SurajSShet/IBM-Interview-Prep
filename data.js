@@ -142,14 +142,47 @@ const CODING_PROBLEMS = [
     ],
     approach: "HashMap Lookup",
     timeComplexity: "O(n)", spaceComplexity: "O(n)",
-    solution: `def two_sum(nums, target):
+    solutions: {
+      python: `def two_sum(nums, target):
     seen = {}
     for i, num in enumerate(nums):
         complement = target - num
         if complement in seen:
             return [seen[complement], i]
         seen[num] = i
-    return []`
+    return []`,
+      java: `import java.util.HashMap;
+public int[] twoSum(int[] nums, int target) {
+    HashMap<Integer, Integer> seen = new HashMap<>();
+    for (int i = 0; i < nums.length; i++) {
+        int complement = target - nums[i];
+        if (seen.containsKey(complement))
+            return new int[]{seen.get(complement), i};
+        seen.put(nums[i], i);
+    }
+    return new int[]{};
+}`,
+      cpp: `vector<int> twoSum(vector<int>& nums, int target) {
+    unordered_map<int, int> seen;
+    for (int i = 0; i < nums.size(); i++) {
+        int complement = target - nums[i];
+        if (seen.count(complement))
+            return {seen[complement], i};
+        seen[nums[i]] = i;
+    }
+    return {};
+}`,
+      c: `// Returns result via output array; result[0] and result[1] hold indices
+void twoSum(int* nums, int numsSize, int target, int* result) {
+    for (int i = 0; i < numsSize; i++) {
+        for (int j = i + 1; j < numsSize; j++) {
+            if (nums[i] + nums[j] == target) {
+                result[0] = i; result[1] = j; return;
+            }
+        }
+    }
+}`
+    }
   },
   {
     id: 2, title: "Reverse a Linked List", diff: "easy",
@@ -166,7 +199,8 @@ const CODING_PROBLEMS = [
     ],
     approach: "Iterative with 3 pointers",
     timeComplexity: "O(n)", spaceComplexity: "O(1)",
-    solution: `def reverse_list(head):
+    solutions: {
+      python: `def reverse_list(head):
     prev = None
     curr = head
     while curr:
@@ -174,7 +208,38 @@ const CODING_PROBLEMS = [
         curr.next = prev
         prev = curr
         curr = next_node
-    return prev`
+    return prev`,
+      java: `public ListNode reverseList(ListNode head) {
+    ListNode prev = null, curr = head;
+    while (curr != null) {
+        ListNode next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}`,
+      cpp: `ListNode* reverseList(ListNode* head) {
+    ListNode *prev = nullptr, *curr = head;
+    while (curr) {
+        ListNode* next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}`,
+      c: `struct ListNode* reverseList(struct ListNode* head) {
+    struct ListNode *prev = NULL, *curr = head;
+    while (curr) {
+        struct ListNode* next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}`
+    }
   },
   {
     id: 3, title: "Valid Parentheses", diff: "easy",
@@ -193,7 +258,8 @@ const CODING_PROBLEMS = [
     ],
     approach: "Stack-based matching",
     timeComplexity: "O(n)", spaceComplexity: "O(n)",
-    solution: `def is_valid(s):
+    solutions: {
+      python: `def is_valid(s):
     stack = []
     mapping = {')': '(', '}': '{', ']': '['}
     for char in s:
@@ -203,7 +269,51 @@ const CODING_PROBLEMS = [
                 return False
         else:
             stack.append(char)
-    return not stack`
+    return not stack`,
+      java: `public boolean isValid(String s) {
+    Deque<Character> stack = new ArrayDeque<>();
+    for (char c : s.toCharArray()) {
+        if (c == '(' || c == '{' || c == '[') stack.push(c);
+        else if (stack.isEmpty()) return false;
+        else if (c == ')' && stack.pop() != '(') return false;
+        else if (c == '}' && stack.pop() != '{') return false;
+        else if (c == ']' && stack.pop() != '[') return false;
+    }
+    return stack.isEmpty();
+}`,
+      cpp: `bool isValid(string s) {
+    stack<char> st;
+    for (char c : s) {
+        if (c=='(' || c=='{' || c=='[') st.push(c);
+        else {
+            if (st.empty()) return false;
+            if (c==')' && st.top()!='(') return false;
+            if (c=='}' && st.top()!='{') return false;
+            if (c==']' && st.top()!='[') return false;
+            st.pop();
+        }
+    }
+    return st.empty();
+}`,
+      c: `#include <stdbool.h>
+#include <string.h>
+bool isValid(char* s) {
+    int n = strlen(s);
+    char stack[n]; int top = -1;
+    for (int i = 0; s[i]; i++) {
+        char c = s[i];
+        if (c=='(' || c=='{' || c=='[') stack[++top] = c;
+        else {
+            if (top < 0) return false;
+            char t = stack[top--];
+            if (c==')' && t!='(') return false;
+            if (c=='}' && t!='{') return false;
+            if (c==']' && t!='[') return false;
+        }
+    }
+    return top == -1;
+}`
+    }
   },
   {
     id: 4, title: "Maximum Subarray (Kadane's)", diff: "easy",
@@ -220,12 +330,38 @@ const CODING_PROBLEMS = [
     ],
     approach: "Kadane's Algorithm",
     timeComplexity: "O(n)", spaceComplexity: "O(1)",
-    solution: `def max_subarray(nums):
+    solutions: {
+      python: `def max_subarray(nums):
     max_sum = curr_sum = nums[0]
     for num in nums[1:]:
         curr_sum = max(num, curr_sum + num)
         max_sum = max(max_sum, curr_sum)
-    return max_sum`
+    return max_sum`,
+      java: `public int maxSubArray(int[] nums) {
+    int maxSum = nums[0], currSum = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+        currSum = Math.max(nums[i], currSum + nums[i]);
+        maxSum = Math.max(maxSum, currSum);
+    }
+    return maxSum;
+}`,
+      cpp: `int maxSubArray(vector<int>& nums) {
+    int maxSum = nums[0], currSum = nums[0];
+    for (int i = 1; i < nums.size(); i++) {
+        currSum = max(nums[i], currSum + nums[i]);
+        maxSum = max(maxSum, currSum);
+    }
+    return maxSum;
+}`,
+      c: `int maxSubArray(int* nums, int n) {
+    int maxSum = nums[0], currSum = nums[0];
+    for (int i = 1; i < n; i++) {
+        currSum = nums[i] > currSum + nums[i] ? nums[i] : currSum + nums[i];
+        if (currSum > maxSum) maxSum = currSum;
+    }
+    return maxSum;
+}`
+    }
   },
   {
     id: 5, title: "Binary Search", diff: "easy",
@@ -242,7 +378,8 @@ const CODING_PROBLEMS = [
     ],
     approach: "Iterative Binary Search",
     timeComplexity: "O(log n)", spaceComplexity: "O(1)",
-    solution: `def binary_search(nums, target):
+    solutions: {
+      python: `def binary_search(nums, target):
     left, right = 0, len(nums) - 1
     while left <= right:
         mid = (left + right) // 2
@@ -252,7 +389,38 @@ const CODING_PROBLEMS = [
             left = mid + 1
         else:
             right = mid - 1
-    return -1`
+    return -1`,
+      java: `public int search(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}`,
+      cpp: `int search(vector<int>& nums, int target) {
+    int left = 0, right = nums.size() - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}`,
+      c: `int search(int* nums, int n, int target) {
+    int left = 0, right = n - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}`
+    }
   },
   {
     id: 6, title: "Longest Common Subsequence", diff: "medium",
@@ -269,7 +437,8 @@ const CODING_PROBLEMS = [
     ],
     approach: "2D Dynamic Programming",
     timeComplexity: "O(m×n)", spaceComplexity: "O(m×n)",
-    solution: `def lcs(text1, text2):
+    solutions: {
+      python: `def lcs(text1, text2):
     m, n = len(text1), len(text2)
     dp = [[0]*(n+1) for _ in range(m+1)]
     for i in range(1, m+1):
@@ -278,7 +447,38 @@ const CODING_PROBLEMS = [
                 dp[i][j] = dp[i-1][j-1] + 1
             else:
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
-    return dp[m][n]`
+    return dp[m][n]`,
+      java: `public int longestCommonSubsequence(String t1, String t2) {
+    int m = t1.length(), n = t2.length();
+    int[][] dp = new int[m+1][n+1];
+    for (int i = 1; i <= m; i++)
+        for (int j = 1; j <= n; j++)
+            if (t1.charAt(i-1) == t2.charAt(j-1))
+                dp[i][j] = dp[i-1][j-1] + 1;
+            else
+                dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+    return dp[m][n];
+}`,
+      cpp: `int longestCommonSubsequence(string t1, string t2) {
+    int m = t1.size(), n = t2.size();
+    vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+    for (int i = 1; i <= m; i++)
+        for (int j = 1; j <= n; j++)
+            if (t1[i-1] == t2[j-1]) dp[i][j] = dp[i-1][j-1]+1;
+            else dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+    return dp[m][n];
+}`,
+      c: `int lcs(char* t1, char* t2) {
+    int m = strlen(t1), n = strlen(t2);
+    int dp[m+1][n+1];
+    memset(dp, 0, sizeof(dp));
+    for (int i = 1; i <= m; i++)
+        for (int j = 1; j <= n; j++)
+            if (t1[i-1] == t2[j-1]) dp[i][j] = dp[i-1][j-1]+1;
+            else dp[i][j] = dp[i-1][j] > dp[i][j-1] ? dp[i-1][j] : dp[i][j-1];
+    return dp[m][n];
+}`
+    }
   },
   {
     id: 7, title: "Number of Islands", diff: "medium",
@@ -294,7 +494,8 @@ const CODING_PROBLEMS = [
     ],
     approach: "DFS flood fill",
     timeComplexity: "O(m×n)", spaceComplexity: "O(m×n)",
-    solution: `def num_islands(grid):
+    solutions: {
+      python: `def num_islands(grid):
     if not grid: return 0
     count = 0
     def dfs(r, c):
@@ -309,7 +510,45 @@ const CODING_PROBLEMS = [
             if grid[r][c] == '1':
                 dfs(r, c)
                 count += 1
-    return count`
+    return count`,
+      java: `public int numIslands(char[][] grid) {
+    int count = 0;
+    for (int r = 0; r < grid.length; r++)
+        for (int c = 0; c < grid[0].length; c++)
+            if (grid[r][c] == '1') { dfs(grid,r,c); count++; }
+    return count;
+}
+void dfs(char[][] g, int r, int c) {
+    if (r<0||r>=g.length||c<0||c>=g[0].length||g[r][c]!='1') return;
+    g[r][c]='0';
+    dfs(g,r+1,c); dfs(g,r-1,c); dfs(g,r,c+1); dfs(g,r,c-1);
+}`,
+      cpp: `void dfs(vector<vector<char>>& g, int r, int c) {
+    if (r<0||r>=(int)g.size()||c<0||c>=(int)g[0].size()||g[r][c]!='1') return;
+    g[r][c]='0';
+    dfs(g,r+1,c); dfs(g,r-1,c); dfs(g,r,c+1); dfs(g,r,c-1);
+}
+int numIslands(vector<vector<char>>& grid) {
+    int count = 0;
+    for (int r=0;r<grid.size();r++)
+        for (int c=0;c<grid[0].size();c++)
+            if (grid[r][c]=='1') { dfs(grid,r,c); count++; }
+    return count;
+}`,
+      c: `void dfs(char** g, int rows, int cols, int r, int c) {
+    if (r<0||r>=rows||c<0||c>=cols||g[r][c]!='1') return;
+    g[r][c]='0';
+    dfs(g,rows,cols,r+1,c); dfs(g,rows,cols,r-1,c);
+    dfs(g,rows,cols,r,c+1); dfs(g,rows,cols,r,c-1);
+}
+int numIslands(char** grid, int rows, int cols) {
+    int count = 0;
+    for (int r=0;r<rows;r++)
+        for (int c=0;c<cols;c++)
+            if (grid[r][c]=='1') { dfs(grid,rows,cols,r,c); count++; }
+    return count;
+}`
+    }
   },
   {
     id: 8, title: "0/1 Knapsack Problem", diff: "medium",
@@ -325,7 +564,8 @@ const CODING_PROBLEMS = [
     ],
     approach: "2D DP Table",
     timeComplexity: "O(n×W)", spaceComplexity: "O(n×W)",
-    solution: `def knapsack(weights, values, W):
+    solutions: {
+      python: `def knapsack(weights, values, W):
     n = len(weights)
     dp = [[0]*(W+1) for _ in range(n+1)]
     for i in range(1, n+1):
@@ -334,7 +574,44 @@ const CODING_PROBLEMS = [
             if weights[i-1] <= w:
                 dp[i][w] = max(dp[i][w],
                     dp[i-1][w-weights[i-1]] + values[i-1])
-    return dp[n][W]`
+    return dp[n][W]`,
+      java: `public int knapsack(int[] weights, int[] values, int W) {
+    int n = weights.length;
+    int[][] dp = new int[n+1][W+1];
+    for (int i = 1; i <= n; i++)
+        for (int w = 0; w <= W; w++) {
+            dp[i][w] = dp[i-1][w];
+            if (weights[i-1] <= w)
+                dp[i][w] = Math.max(dp[i][w],
+                    dp[i-1][w-weights[i-1]] + values[i-1]);
+        }
+    return dp[n][W];
+}`,
+      cpp: `int knapsack(vector<int>& wt, vector<int>& val, int W) {
+    int n = wt.size();
+    vector<vector<int>> dp(n+1, vector<int>(W+1, 0));
+    for (int i = 1; i <= n; i++)
+        for (int w = 0; w <= W; w++) {
+            dp[i][w] = dp[i-1][w];
+            if (wt[i-1] <= w)
+                dp[i][w] = max(dp[i][w], dp[i-1][w-wt[i-1]]+val[i-1]);
+        }
+    return dp[n][W];
+}`,
+      c: `int knapsack(int* wt, int* val, int n, int W) {
+    int dp[n+1][W+1];
+    memset(dp, 0, sizeof(dp));
+    for (int i = 1; i <= n; i++)
+        for (int w = 0; w <= W; w++) {
+            dp[i][w] = dp[i-1][w];
+            if (wt[i-1] <= w) {
+                int take = dp[i-1][w-wt[i-1]] + val[i-1];
+                if (take > dp[i][w]) dp[i][w] = take;
+            }
+        }
+    return dp[n][W];
+}`
+    }
   },
   {
     id: 9, title: "Merge Intervals", diff: "medium",
@@ -350,7 +627,8 @@ const CODING_PROBLEMS = [
     ],
     approach: "Sort + Linear Scan",
     timeComplexity: "O(n log n)", spaceComplexity: "O(n)",
-    solution: `def merge(intervals):
+    solutions: {
+      python: `def merge(intervals):
     intervals.sort(key=lambda x: x[0])
     merged = [intervals[0]]
     for start, end in intervals[1:]:
@@ -358,7 +636,46 @@ const CODING_PROBLEMS = [
             merged[-1][1] = max(merged[-1][1], end)
         else:
             merged.append([start, end])
-    return merged`
+    return merged`,
+      java: `public int[][] merge(int[][] intervals) {
+    Arrays.sort(intervals, (a,b) -> a[0]-b[0]);
+    List<int[]> res = new ArrayList<>();
+    res.add(intervals[0]);
+    for (int i = 1; i < intervals.length; i++) {
+        int[] last = res.get(res.size()-1);
+        if (intervals[i][0] <= last[1])
+            last[1] = Math.max(last[1], intervals[i][1]);
+        else res.add(intervals[i]);
+    }
+    return res.toArray(new int[0][]);
+}`,
+      cpp: `vector<vector<int>> merge(vector<vector<int>>& intervals) {
+    sort(intervals.begin(), intervals.end());
+    vector<vector<int>> res = {intervals[0]};
+    for (int i = 1; i < intervals.size(); i++) {
+        if (intervals[i][0] <= res.back()[1])
+            res.back()[1] = max(res.back()[1], intervals[i][1]);
+        else res.push_back(intervals[i]);
+    }
+    return res;
+}`,
+      c: `// Sort by start, then merge (simplified - assumes pre-sorted input)
+int cmp(const void* a, const void* b) {
+    return ((int*)a)[0] - ((int*)b)[0];
+}
+// Returns merged count; merged[][] holds result
+int mergeIntervals(int intervals[][2], int n, int merged[][2]) {
+    qsort(intervals, n, sizeof(intervals[0]), cmp);
+    int k = 0;
+    merged[k][0] = intervals[0][0]; merged[k][1] = intervals[0][1];
+    for (int i = 1; i < n; i++) {
+        if (intervals[i][0] <= merged[k][1]) {
+            if (intervals[i][1] > merged[k][1]) merged[k][1] = intervals[i][1];
+        } else { k++; merged[k][0]=intervals[i][0]; merged[k][1]=intervals[i][1]; }
+    }
+    return k + 1;
+}`
+    }
   },
   {
     id: 10, title: "Trapping Rain Water", diff: "hard",
@@ -374,7 +691,8 @@ const CODING_PROBLEMS = [
     ],
     approach: "Two Pointer",
     timeComplexity: "O(n)", spaceComplexity: "O(1)",
-    solution: `def trap(height):
+    solutions: {
+      python: `def trap(height):
     left, right = 0, len(height) - 1
     left_max = right_max = water = 0
     while left < right:
@@ -390,7 +708,56 @@ const CODING_PROBLEMS = [
             else:
                 water += right_max - height[right]
             right -= 1
-    return water`
+    return water`,
+      java: `public int trap(int[] height) {
+    int left=0, right=height.length-1;
+    int leftMax=0, rightMax=0, water=0;
+    while (left < right) {
+        if (height[left] < height[right]) {
+            if (height[left] >= leftMax) leftMax = height[left];
+            else water += leftMax - height[left];
+            left++;
+        } else {
+            if (height[right] >= rightMax) rightMax = height[right];
+            else water += rightMax - height[right];
+            right--;
+        }
+    }
+    return water;
+}`,
+      cpp: `int trap(vector<int>& height) {
+    int left=0, right=height.size()-1;
+    int leftMax=0, rightMax=0, water=0;
+    while (left < right) {
+        if (height[left] < height[right]) {
+            if (height[left] >= leftMax) leftMax = height[left];
+            else water += leftMax - height[left];
+            left++;
+        } else {
+            if (height[right] >= rightMax) rightMax = height[right];
+            else water += rightMax - height[right];
+            right--;
+        }
+    }
+    return water;
+}`,
+      c: `int trap(int* height, int n) {
+    int left=0, right=n-1;
+    int leftMax=0, rightMax=0, water=0;
+    while (left < right) {
+        if (height[left] < height[right]) {
+            if (height[left] >= leftMax) leftMax = height[left];
+            else water += leftMax - height[left];
+            left++;
+        } else {
+            if (height[right] >= rightMax) rightMax = height[right];
+            else water += rightMax - height[right];
+            right--;
+        }
+    }
+    return water;
+}`
+    }
   },
   {
     id: 11, title: "Word Break", diff: "hard",
@@ -407,7 +774,8 @@ const CODING_PROBLEMS = [
     ],
     approach: "1D DP with word set",
     timeComplexity: "O(n²)", spaceComplexity: "O(n)",
-    solution: `def word_break(s, wordDict):
+    solutions: {
+      python: `def word_break(s, wordDict):
     word_set = set(wordDict)
     n = len(s)
     dp = [False] * (n + 1)
@@ -417,7 +785,46 @@ const CODING_PROBLEMS = [
             if dp[j] and s[j:i] in word_set:
                 dp[i] = True
                 break
-    return dp[n]`
+    return dp[n]`,
+      java: `public boolean wordBreak(String s, List<String> wordDict) {
+    Set<String> ws = new HashSet<>(wordDict);
+    boolean[] dp = new boolean[s.length()+1];
+    dp[0] = true;
+    for (int i = 1; i <= s.length(); i++)
+        for (int j = 0; j < i; j++)
+            if (dp[j] && ws.contains(s.substring(j, i))) {
+                dp[i] = true; break;
+            }
+    return dp[s.length()];
+}`,
+      cpp: `bool wordBreak(string s, vector<string>& wordDict) {
+    unordered_set<string> ws(wordDict.begin(), wordDict.end());
+    int n = s.size();
+    vector<bool> dp(n+1, false);
+    dp[0] = true;
+    for (int i = 1; i <= n; i++)
+        for (int j = 0; j < i; j++)
+            if (dp[j] && ws.count(s.substr(j, i-j))) { dp[i]=true; break; }
+    return dp[n];
+}`,
+      c: `#include <stdbool.h>
+#include <string.h>
+// Simple O(n^2 * k) solution with string comparison
+bool wordBreak(char* s, char** wordDict, int dictSize) {
+    int n = strlen(s);
+    bool dp[n+1]; memset(dp, 0, sizeof(dp));
+    dp[0] = true;
+    for (int i = 1; i <= n; i++)
+        for (int j = 0; j < i && !dp[i]; j++)
+            if (dp[j]) {
+                int len = i-j;
+                for (int k = 0; k < dictSize; k++)
+                    if ((int)strlen(wordDict[k])==len && strncmp(s+j,wordDict[k],len)==0)
+                        { dp[i]=true; break; }
+            }
+    return dp[n];
+}`
+    }
   },
   {
     id: 12, title: "Median of Two Sorted Arrays", diff: "hard",
@@ -434,7 +841,8 @@ const CODING_PROBLEMS = [
     ],
     approach: "Binary Search on smaller array",
     timeComplexity: "O(log(min(m,n)))", spaceComplexity: "O(1)",
-    solution: `def find_median(nums1, nums2):
+    solutions: {
+      python: `def find_median(nums1, nums2):
     if len(nums1) > len(nums2):
         nums1, nums2 = nums2, nums1
     m, n = len(nums1), len(nums2)
@@ -453,7 +861,61 @@ const CODING_PROBLEMS = [
         elif maxX > minY:
             hi = px - 1
         else:
-            lo = px + 1`
+            lo = px + 1`,
+      java: `public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+    if (nums1.length > nums2.length) { int[] t=nums1; nums1=nums2; nums2=t; }
+    int m=nums1.length, n=nums2.length, lo=0, hi=m;
+    while (lo <= hi) {
+        int px=(lo+hi)/2, py=(m+n+1)/2-px;
+        int maxX = px==0 ? Integer.MIN_VALUE : nums1[px-1];
+        int minX = px==m ? Integer.MAX_VALUE : nums1[px];
+        int maxY = py==0 ? Integer.MIN_VALUE : nums2[py-1];
+        int minY = py==n ? Integer.MAX_VALUE : nums2[py];
+        if (maxX<=minY && maxY<=minX) {
+            if ((m+n)%2==1) return Math.max(maxX,maxY);
+            return (Math.max(maxX,maxY)+Math.min(minX,minY))/2.0;
+        } else if (maxX > minY) hi=px-1;
+        else lo=px+1;
+    }
+    return 0;
+}`,
+      cpp: `double findMedianSortedArrays(vector<int>& a, vector<int>& b) {
+    if (a.size() > b.size()) swap(a, b);
+    int m=a.size(), n=b.size(), lo=0, hi=m;
+    while (lo <= hi) {
+        int px=(lo+hi)/2, py=(m+n+1)/2-px;
+        int maxX = px==0 ? INT_MIN : a[px-1];
+        int minX = px==m ? INT_MAX : a[px];
+        int maxY = py==0 ? INT_MIN : b[py-1];
+        int minY = py==n ? INT_MAX : b[py];
+        if (maxX<=minY && maxY<=minX) {
+            if ((m+n)%2==1) return max(maxX,maxY);
+            return (max(maxX,maxY)+min(minX,minY))/2.0;
+        } else if (maxX>minY) hi=px-1;
+        else lo=px+1;
+    }
+    return 0;
+}`,
+      c: `double findMedianSortedArrays(int* a, int m, int* b, int n) {
+    if (m > n) { int* t=a; a=b; b=t; int tmp=m; m=n; n=tmp; }
+    int lo=0, hi=m;
+    while (lo <= hi) {
+        int px=(lo+hi)/2, py=(m+n+1)/2-px;
+        int maxX = px==0 ? -2147483648 : a[px-1];
+        int minX = px==m ?  2147483647 : a[px];
+        int maxY = py==0 ? -2147483648 : b[py-1];
+        int minY = py==n ?  2147483647 : b[py];
+        if (maxX<=minY && maxY<=minX) {
+            int hi2 = maxX>maxY ? maxX : maxY;
+            int lo2 = minX<minY ? minX : minY;
+            if ((m+n)%2==1) return hi2;
+            return (hi2+lo2)/2.0;
+        } else if (maxX>minY) hi=px-1;
+        else lo=px+1;
+    }
+    return 0;
+}`
+    }
   }
 ];
 
@@ -463,16 +925,16 @@ const MOCK_TESTS = [
     desc: "Complete simulation of IBM Online Assessment with Aptitude, Logical & English sections.",
     questions: 30, time: 60, sections: "Aptitude + Logical + English",
     questions_data: [
-      { q: "If 15% of x = 20% of y, then x:y = ?", options: ["3:4","4:3","2:3","3:2"], ans: 1, explanation: "0.15x = 0.20y → x/y = 0.20/0.15 = 4/3" },
-      { q: "A boat goes 12 km upstream in 4 hours and 18 km downstream in 3 hours. Find speed of stream.", options: ["1.5 km/h","2 km/h","1 km/h","2.5 km/h"], ans: 0, explanation: "Upstream=3km/h, Downstream=6km/h. Stream=(6-3)/2=1.5km/h" },
-      { q: "Find the odd one out: 2, 5, 10, 17, 26, 37, 50, 64", options: ["37","50","64","26"], ans: 2, explanation: "Series: 1²+1, 2²+1, 3²+1... Next after 50 (7²+1) should be 8²+1=65, not 64" },
-      { q: "If FRIEND is coded as HUMJTK, how is CANDLE coded?", options: ["EDRIRL","DCQHQK","EDRJQM","ECPFNG"], ans: 0, explanation: "Each letter shifted by +2,+3,+2,+3... pattern" },
-      { q: "Choose correct: 'Neither the students nor the teacher ___ present.'", options: ["were","was","are","have been"], ans: 1, explanation: "With 'neither...nor', verb agrees with the subject closest to it (teacher - singular)" },
-      { q: "A sum doubles in 5 years at SI. In how many years will it become 4 times?", options: ["10","15","20","25"], ans: 1, explanation: "Rate = 100/5 = 20%. For 4x: 300% interest needed. Time = 300/20 = 15 years" },
-      { q: "In a class, 40% are girls. 75% of boys and 60% of girls passed. What % of class passed?", options: ["69%","66%","70%","68%"], ans: 0, explanation: "Boys=60%, Girls=40%. Passed=0.6×75+0.4×60=45+24=69%" },
-      { q: "Pointing to a photo, Ram says 'She is the daughter of my grandfather's only son.' Relation?", options: ["Sister","Cousin","Niece","Daughter"], ans: 0, explanation: "Grandfather's only son = Ram's father. Father's daughter = Ram's sister" },
-      { q: "Find next: 1, 4, 9, 16, 25, ?", options: ["30","36","49","35"], ans: 1, explanation: "Perfect squares: 1²,2²,3²,4²,5²,6²=36" },
-      { q: "Synonym of 'Ameliorate':", options: ["Worsen","Improve","Maintain","Ignore"], ans: 1, explanation: "Ameliorate means to make something bad better = Improve" }
+      { q: "If 15% of x = 20% of y, then x:y = ?", options: ["3:4", "4:3", "2:3", "3:2"], ans: 1, explanation: "0.15x = 0.20y → x/y = 0.20/0.15 = 4/3" },
+      { q: "A boat goes 12 km upstream in 4 hours and 18 km downstream in 3 hours. Find speed of stream.", options: ["1.5 km/h", "2 km/h", "1 km/h", "2.5 km/h"], ans: 0, explanation: "Upstream=3km/h, Downstream=6km/h. Stream=(6-3)/2=1.5km/h" },
+      { q: "Find the odd one out: 2, 5, 10, 17, 26, 37, 50, 64", options: ["37", "50", "64", "26"], ans: 2, explanation: "Series: 1²+1, 2²+1, 3²+1... Next after 50 (7²+1) should be 8²+1=65, not 64" },
+      { q: "If FRIEND is coded as HUMJTK, how is CANDLE coded?", options: ["EDRIRL", "DCQHQK", "EDRJQM", "ECPFNG"], ans: 0, explanation: "Each letter shifted by +2,+3,+2,+3... pattern" },
+      { q: "Choose correct: 'Neither the students nor the teacher ___ present.'", options: ["were", "was", "are", "have been"], ans: 1, explanation: "With 'neither...nor', verb agrees with the subject closest to it (teacher - singular)" },
+      { q: "A sum doubles in 5 years at SI. In how many years will it become 4 times?", options: ["10", "15", "20", "25"], ans: 1, explanation: "Rate = 100/5 = 20%. For 4x: 300% interest needed. Time = 300/20 = 15 years" },
+      { q: "In a class, 40% are girls. 75% of boys and 60% of girls passed. What % of class passed?", options: ["69%", "66%", "70%", "68%"], ans: 0, explanation: "Boys=60%, Girls=40%. Passed=0.6×75+0.4×60=45+24=69%" },
+      { q: "Pointing to a photo, Ram says 'She is the daughter of my grandfather's only son.' Relation?", options: ["Sister", "Cousin", "Niece", "Daughter"], ans: 0, explanation: "Grandfather's only son = Ram's father. Father's daughter = Ram's sister" },
+      { q: "Find next: 1, 4, 9, 16, 25, ?", options: ["30", "36", "49", "35"], ans: 1, explanation: "Perfect squares: 1²,2²,3²,4²,5²,6²=36" },
+      { q: "Synonym of 'Ameliorate':", options: ["Worsen", "Improve", "Maintain", "Ignore"], ans: 1, explanation: "Ameliorate means to make something bad better = Improve" }
     ]
   },
   {
@@ -480,16 +942,16 @@ const MOCK_TESTS = [
     desc: "Technical interview simulation covering DS, Algorithms, OS, DBMS, and OOP.",
     questions: 20, time: 45, sections: "DS + Algo + OS + DBMS + OOP",
     questions_data: [
-      { q: "What is the time complexity of inserting into a balanced BST?", options: ["O(1)","O(log n)","O(n)","O(n log n)"], ans: 1, explanation: "Balanced BST maintains height O(log n), so insert is O(log n)" },
-      { q: "Which data structure is used in BFS?", options: ["Stack","Queue","Heap","Tree"], ans: 1, explanation: "BFS uses a Queue (FIFO) to explore nodes level by level" },
-      { q: "What does ACID stand for in DBMS?", options: ["Atomicity, Consistency, Isolation, Durability","Accuracy, Consistency, Integrity, Durability","Atomicity, Concurrency, Isolation, Dependency","None"], ans: 0, explanation: "ACID = Atomicity, Consistency, Isolation, Durability" },
-      { q: "Which sorting algorithm is stable?", options: ["QuickSort","HeapSort","Merge Sort","Selection Sort"], ans: 2, explanation: "Merge Sort is stable - equal elements maintain relative order" },
-      { q: "What is a deadlock?", options: ["Process running forever","Two processes waiting for each other indefinitely","Memory overflow","CPU overload"], ans: 1, explanation: "Deadlock: circular wait where processes hold resources needed by others" },
-      { q: "What is the output of: int x=5; System.out.println(x++ + ++x);", options: ["11","12","13","10"], ans: 1, explanation: "x++=5 (x becomes 6), ++x=7 (x becomes 7). 5+7=12" },
-      { q: "Which JOIN returns all rows from both tables?", options: ["INNER JOIN","LEFT JOIN","RIGHT JOIN","FULL OUTER JOIN"], ans: 3, explanation: "FULL OUTER JOIN returns all rows from both tables, with NULLs where no match" },
-      { q: "What is polymorphism?", options: ["Multiple inheritance","Same interface, different implementations","Data hiding","Code reuse"], ans: 1, explanation: "Polymorphism: one interface, multiple implementations (overloading/overriding)" },
-      { q: "Virtual memory is managed by?", options: ["CPU","Compiler","OS","Hardware only"], ans: 2, explanation: "OS manages virtual memory through page tables and page fault handling" },
-      { q: "What is the space complexity of recursive Fibonacci without memoization?", options: ["O(1)","O(n)","O(log n)","O(2^n)"], ans: 1, explanation: "Call stack depth is O(n) even though time is O(2^n)" }
+      { q: "What is the time complexity of inserting into a balanced BST?", options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"], ans: 1, explanation: "Balanced BST maintains height O(log n), so insert is O(log n)" },
+      { q: "Which data structure is used in BFS?", options: ["Stack", "Queue", "Heap", "Tree"], ans: 1, explanation: "BFS uses a Queue (FIFO) to explore nodes level by level" },
+      { q: "What does ACID stand for in DBMS?", options: ["Atomicity, Consistency, Isolation, Durability", "Accuracy, Consistency, Integrity, Durability", "Atomicity, Concurrency, Isolation, Dependency", "None"], ans: 0, explanation: "ACID = Atomicity, Consistency, Isolation, Durability" },
+      { q: "Which sorting algorithm is stable?", options: ["QuickSort", "HeapSort", "Merge Sort", "Selection Sort"], ans: 2, explanation: "Merge Sort is stable - equal elements maintain relative order" },
+      { q: "What is a deadlock?", options: ["Process running forever", "Two processes waiting for each other indefinitely", "Memory overflow", "CPU overload"], ans: 1, explanation: "Deadlock: circular wait where processes hold resources needed by others" },
+      { q: "What is the output of: int x=5; System.out.println(x++ + ++x);", options: ["11", "12", "13", "10"], ans: 1, explanation: "x++=5 (x becomes 6), ++x=7 (x becomes 7). 5+7=12" },
+      { q: "Which JOIN returns all rows from both tables?", options: ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL OUTER JOIN"], ans: 3, explanation: "FULL OUTER JOIN returns all rows from both tables, with NULLs where no match" },
+      { q: "What is polymorphism?", options: ["Multiple inheritance", "Same interface, different implementations", "Data hiding", "Code reuse"], ans: 1, explanation: "Polymorphism: one interface, multiple implementations (overloading/overriding)" },
+      { q: "Virtual memory is managed by?", options: ["CPU", "Compiler", "OS", "Hardware only"], ans: 2, explanation: "OS manages virtual memory through page tables and page fault handling" },
+      { q: "What is the space complexity of recursive Fibonacci without memoization?", options: ["O(1)", "O(n)", "O(log n)", "O(2^n)"], ans: 1, explanation: "Call stack depth is O(n) even though time is O(2^n)" }
     ]
   },
   {
@@ -497,13 +959,13 @@ const MOCK_TESTS = [
     desc: "MCQ-based coding assessment testing algorithm knowledge and code output prediction.",
     questions: 15, time: 30, sections: "Coding + Algorithms",
     questions_data: [
-      { q: "What does this return: [x*x for x in range(5) if x%2==0]?", options: ["[0,4,16]","[0,1,4,9,16]","[4,16]","[0,4]"], ans: 0, explanation: "Even numbers in range(5): 0,2,4. Squares: 0,4,16" },
-      { q: "What is the output: print(type(1/2))?", options: ["<class 'int'>","<class 'float'>","<class 'double'>","Error"], ans: 1, explanation: "In Python 3, / always returns float. 1/2 = 0.5 (float)" },
-      { q: "Which is NOT a valid way to reverse a list in Python?", options: ["list.reverse()","list[::-1]","reversed(list)","list.sort(reverse=True)"], ans: 3, explanation: "sort(reverse=True) sorts descending, doesn't reverse original order" },
-      { q: "What is the output: print(bool('') or bool('IBM'))?", options: ["True","False","''","IBM"], ans: 0, explanation: "bool('')=False, bool('IBM')=True. False or True = True" },
-      { q: "Time complexity of finding an element in a Python dict?", options: ["O(n)","O(log n)","O(1) average","O(n²)"], ans: 2, explanation: "Python dict uses hash table, average O(1) lookup" },
-      { q: "What does 'pass' do in Python?", options: ["Exits function","Does nothing (placeholder)","Skips iteration","Returns None"], ans: 1, explanation: "pass is a null statement used as a placeholder" },
-      { q: "Output of: print(3 * '=' + ' IBM ' + 3 * '=')?", options: ["=== IBM ===","3=IBM3=","Error","= = = IBM = = ="], ans: 0, explanation: "String multiplication: '===' + ' IBM ' + '===' = '=== IBM ===' " }
+      { q: "What does this return: [x*x for x in range(5) if x%2==0]?", options: ["[0,4,16]", "[0,1,4,9,16]", "[4,16]", "[0,4]"], ans: 0, explanation: "Even numbers in range(5): 0,2,4. Squares: 0,4,16" },
+      { q: "What is the output: print(type(1/2))?", options: ["<class 'int'>", "<class 'float'>", "<class 'double'>", "Error"], ans: 1, explanation: "In Python 3, / always returns float. 1/2 = 0.5 (float)" },
+      { q: "Which is NOT a valid way to reverse a list in Python?", options: ["list.reverse()", "list[::-1]", "reversed(list)", "list.sort(reverse=True)"], ans: 3, explanation: "sort(reverse=True) sorts descending, doesn't reverse original order" },
+      { q: "What is the output: print(bool('') or bool('IBM'))?", options: ["True", "False", "''", "IBM"], ans: 0, explanation: "bool('')=False, bool('IBM')=True. False or True = True" },
+      { q: "Time complexity of finding an element in a Python dict?", options: ["O(n)", "O(log n)", "O(1) average", "O(n²)"], ans: 2, explanation: "Python dict uses hash table, average O(1) lookup" },
+      { q: "What does 'pass' do in Python?", options: ["Exits function", "Does nothing (placeholder)", "Skips iteration", "Returns None"], ans: 1, explanation: "pass is a null statement used as a placeholder" },
+      { q: "Output of: print(3 * '=' + ' IBM ' + 3 * '=')?", options: ["=== IBM ===", "3=IBM3=", "Error", "= = = IBM = = ="], ans: 0, explanation: "String multiplication: '===' + ' IBM ' + '===' = '=== IBM ===' " }
     ]
   }
 ];

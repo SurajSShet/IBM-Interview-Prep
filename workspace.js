@@ -71,6 +71,23 @@ rl.on('close', () => {
     console.log("Output here");
 });
 `
+    },
+    c: {
+        cm: 'text/x-csrc', ext: 'c', label: 'C',
+        pistonLang: 'c', pistonVersion: '10.2.0',
+        template: `// IBM Coding Assessment – C
+// Problem: {title}
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    // Read input and solve
+    printf("Output here\\n");
+    return 0;
+}
+`
     }
 };
 
@@ -268,10 +285,8 @@ async function runCode() {
       </div>
     `;
 
-        // Also run test cases if Python (we can simulate)
-        if (wsCurrentLang === 'python') {
-            runTestCases(code, cfg, elapsed);
-        }
+        // Run test cases for all languages
+        runTestCases(code, cfg, elapsed);
 
     } catch (err) {
         placeholder.style.display = 'none';

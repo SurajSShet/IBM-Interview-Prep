@@ -332,6 +332,39 @@ body {
   box-shadow: 0 4px 16px rgba(15, 98, 254, 0.35);
 }
 
+/* ===== SOLUTION LANGUAGE TABS (in modal) ===== */
+.sol-lang-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.sol-lang-btn {
+  padding: 5px 13px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: 'IBM Plex Sans', sans-serif;
+  white-space: nowrap;
+}
+
+.sol-lang-btn:hover {
+  border-color: var(--ibm-blue-light);
+  color: var(--text-primary);
+}
+
+.sol-lang-btn.active {
+  background: var(--ibm-blue);
+  border-color: var(--ibm-blue);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(15, 98, 254, 0.4);
+}
+
 /* ===== TAB CONTENT ===== */
 .tab-content {
   min-height: 200px;
